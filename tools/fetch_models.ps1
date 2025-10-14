@@ -5,9 +5,9 @@ param(
 New-Item -ItemType Directory -Force -Path $ModelsDir | Out-Null
 Write-Host "Models dir: $ModelsDir"
 
-Write-Host "`n[ASR] Download a CTranslate2 Whisper model (e.g., small):"
+Write-Host "`n[ASR] Download a CTranslate2 Whisper model (e.g., medium):"
 Write-Host "  - https://github.com/guillaumekln/faster-whisper#available-models"
-Write-Host "  Place into: $ModelsDir/whisper-small-ct2"
+Write-Host "  Place into: $ModelsDir/whisper-medium-ct2"
 
 Write-Host "`n[MT] Convert NLLB to CTranslate2 or use Marian (OPUS-MT):"
 Write-Host "  - NLLB ct2 guide: https://opennmt.net/CTranslate2/"

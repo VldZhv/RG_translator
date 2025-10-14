@@ -24,7 +24,7 @@ class VadCfg(BaseModel):
 
 class AsrCfg(BaseModel):
     engine: Literal["faster-whisper", "vosk"] = "faster-whisper"
-    model_path: str = "models/whisper-small-ct2"
+    model_path: str = "models/whisper-medium-ct2"
     beam_size: int = 5
     lang_detect: bool = True
 

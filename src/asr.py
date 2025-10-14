@@ -12,8 +12,26 @@ class ASR:
         if not mock:
             if engine == "faster-whisper":
                 from faster_whisper import WhisperModel
+
                 device = "cuda" if use_gpu else "cpu"
-                self.model = WhisperModel(model_path, device=device, compute_type="float16" if use_gpu else "int8")
+                compute_type = "float16" if use_gpu else "int8"
+
+                try:
+                    self.model = WhisperModel(
+                        model_path,
+                        device=device,
+                        compute_type=compute_type,
+                    )
+                except RuntimeError as err:
+                    if use_gpu and "float16" in compute_type:
+                        # Для некоторых видеокарт (например, GTX 10xx) может потребоваться float32.
+                        self.model = WhisperModel(
+                            model_path,
+                            device=device,
+                            compute_type="float32",
+                        )
+                    else:
+                        raise err
             elif engine == "vosk":
                 import vosk  # type: ignore
                 self.model = vosk.Model(model_path)
