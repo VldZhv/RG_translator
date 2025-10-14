@@ -1,0 +1,54 @@
+app:
+  mode: "mic"
+  input_wav: ""
+  mock: false
+  sample_rate: 16000
+  chunk_ms: 400
+  src_lang: "auto"
+  dir: en-ru
+resources:
+  use_gpu: false
+  threads: 6
+vad:
+  enabled: true
+  threshold: 0.005
+  min_speech_ms: 600
+  min_silence_ms: 400
+asr:
+  engine: "faster-whisper"
+  model_path: "D:/CODE/translator-rt/models/whisper-small-ct2"
+  beam_size: 1
+  lang_detect: false
+mt:
+  engine: "marian"
+  model_path: "D:/CODE/translator-rt/models/marian-ru-en"   # RU→EN
+  model_path_back: "D:/CODE/translator-rt/models/marian-en-ru"   # EN→RU  (новое поле)
+  max_src_tokens: 48
+  segmenter:
+    strategy: "fixed"
+    max_words: 16
+tts:
+  engine: "piper"
+  voices:
+    ru: "D:/CODE/translator-rt/models/piper/ru/ru_RU-irina-medium.onnx"
+    en: "D:/CODE/translator-rt/models/piper/en/en_GB-alan-medium.onnx"
+  playback:
+    device: null
+    volume: 0.9
+  piper:
+    length_scale: 0.8
+    noise_scale: 0.667
+    noise_w: 0.8
+logging:
+  level: "INFO"
+  dir: "logs"
+  save_tts_wav: false
+safety:
+  prevent_feedback_loop: "ducking"
+  ducking_db: -12
+
+asr:
+  engine: "faster-whisper"
+  model_path: "D:/CODE/translator-rt/models/whisper-small-ct2"
+
+

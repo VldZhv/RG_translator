@@ -1,0 +1,50 @@
+app:
+  mode: "mic"          # mic | wav
+  input_wav: ""
+  mock: true           # true: без моделей, сквозной конвейер, синтетика
+  sample_rate: 16000
+  chunk_ms: 500
+  src_lang: "auto"     # ru | en | auto
+  dir: "auto"          # ru-en | en-ru | auto
+
+resources:
+  use_gpu: "auto"      # auto | true | false
+  threads: 4
+
+vad:
+  enabled: true
+  threshold: 0.5
+  min_speech_ms: 400
+  min_silence_ms: 300
+
+asr:
+  engine: "faster-whisper"
+  model_path: "models/whisper-small-ct2"
+  beam_size: 5
+  lang_detect: true
+
+mt:
+  engine: "nllb-ct2"
+  model_path: "models/nllb-ru-en-ct2"
+  max_src_tokens: 64
+  segmenter:
+    strategy: "punct_pause"  # punct_pause | fixed
+    max_words: 20
+
+tts:
+  engine: "silero"
+  voices:
+    ru: "aidar_v3_16khz"
+    en: "lj_16khz"
+  playback:
+    device: null
+    volume: 0.9
+
+logging:
+  level: "INFO"
+  dir: "logs"
+  save_tts_wav: false
+
+safety:
+  prevent_feedback_loop: "ducking" # mute_mic | ducking | none
+  ducking_db: -12

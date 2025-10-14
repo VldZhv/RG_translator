@@ -1,0 +1,27 @@
+# Базовые
+numpy>=1.26
+pydantic>=2.8
+pyyaml>=6.0
+structlog>=24.1
+
+# Аудио I/O
+sounddevice>=0.4.6
+soundfile>=0.12.1
+# pyaudio  # опционально, если предпочитаешь
+
+# VAD (силеро)
+# silero-vad не как pip пакет, будем тянуть через torch hub, нужен torch
+
+# ASR
+faster-whisper>=1.0.3
+ctranslate2>=4.4.0
+
+# MT
+transformers>=4.44.0
+sentencepiece>=0.2.0
+
+# TTS (Silero через torch hub)
+torch>=2.3.0; platform_system == "Windows"
+
+# Утилиты
+rich>=13.9

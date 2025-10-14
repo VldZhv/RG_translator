@@ -1,0 +1,43 @@
+app:
+  mode: "mic"
+  input_wav: ""
+  mock: false
+  sample_rate: 16000
+  chunk_ms: 600
+  src_lang: "auto"
+  dir: "auto"
+resources:
+  use_gpu: true
+  threads: 8
+vad:
+  enabled: true
+  threshold: 0.5
+  min_speech_ms: 450
+  min_silence_ms: 350
+asr:
+  engine: "faster-whisper"
+  model_path: "models/whisper-large-v2-ct2"
+  beam_size: 5
+  lang_detect: true
+mt:
+  engine: "nllb-ct2"
+  model_path: "models/nllb-ru-en-ct2"
+  max_src_tokens: 80
+  segmenter:
+    strategy: "punct_pause"
+    max_words: 24
+tts:
+  engine: "silero"
+  voices:
+    ru: "aidar_v3_16khz"
+    en: "lj_16khz"
+  playback:
+    device: "default"
+    volume: 0.95
+logging:
+  level: "INFO"
+  dir: "logs"
+  save_tts_wav: false
+safety:
+  prevent_feedback_loop: "ducking"
+  ducking_db: -12
