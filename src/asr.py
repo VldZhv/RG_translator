@@ -1,5 +1,12 @@
 from __future__ import annotations
 
+import logging
+import os
+
+
+logger = logging.getLogger(__name__)
+
+
 class ASR:
     def __init__(self, engine: str, model_path: str, beam_size: int, lang_detect: bool, use_gpu: bool, mock: bool):
         self.engine = engine
@@ -11,6 +18,12 @@ class ASR:
         self.model = None
         if not mock:
             if engine == "faster-whisper":
+                if not use_gpu:
+                    # У некоторых сборок ctranslate2 при импорте пытается загрузить CUDA-библиотеки,
+                    # даже если планируем работать на CPU. Явно запрещаем использование CUDA,
+                    # чтобы избежать ошибок вида «Could not locate cudnn_ops64_9.dll» на Windows.
+                    os.environ.setdefault("CT2_USE_CUDA", "0")
+
                 from faster_whisper import WhisperModel
 
                 device = "cuda" if use_gpu else "cpu"
@@ -29,6 +42,20 @@ class ASR:
                             model_path,
                             device=device,
                             compute_type="float32",
+                        )
+                    elif "cudnn" in str(err).lower() or "cuda" in str(err).lower():
+                        logger.warning(
+                            "Не удалось инициализировать Faster-Whisper на GPU: %s. Переключаемся на CPU.",
+                            err,
+                        )
+                        os.environ["CT2_USE_CUDA"] = "0"
+                        device = "cpu"
+                        compute_type = "int8"
+                        self.use_gpu = False
+                        self.model = WhisperModel(
+                            model_path,
+                            device=device,
+                            compute_type=compute_type,
                         )
                     else:
                         raise err
