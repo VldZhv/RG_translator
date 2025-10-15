@@ -22,7 +22,17 @@ def _ensure_cuda(module, *, component: str, enabled: bool) -> tuple[object, bool
         )
         return module, False
 
-    if not torch.cuda.is_available():  # pragma: no cover - зависит от окружения
+    try:
+        cuda_available = torch.cuda.is_available()
+    except Exception as exc:  # pragma: no cover - зависит от окружения
+        logger.warning(
+            "Не удалось определить доступность CUDA для компонента %s. Работаем на CPU: %s",
+            component,
+            exc,
+        )
+        return module, False
+
+    if not cuda_available:  # pragma: no cover - зависит от окружения
         logger.warning(
             "CUDA недоступна для компонента %s — переключаемся на CPU", component
         )
