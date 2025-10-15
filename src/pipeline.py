@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import os
 import queue
 import threading
@@ -19,6 +20,34 @@ from .tts import TTS
 from .playback import Player
 from .vad import SimpleEnergyVAD
 from .logs import LogWriter
+
+
+logger = logging.getLogger(__name__)
+
+
+def _resolve_gpu_flag(resources_cfg) -> bool:
+    """Определяет, использовать ли GPU для вычислений."""
+    requested = getattr(resources_cfg, "use_gpu", "auto")
+    if requested is True:
+        logger.info("GPU режим принудительно включён конфигом")
+        return True
+    if requested is False:
+        logger.info("GPU режим принудительно отключён конфигом")
+        return False
+
+    # Режим auto: проверяем наличие CUDA-устройств через ctranslate2
+    try:
+        import ctranslate2  # type: ignore
+
+        has_cuda = ctranslate2.get_cuda_device_count() > 0
+        if has_cuda:
+            logger.info("Обнаружена доступная GPU, включаем ускорение CUDA")
+            return True
+    except Exception as exc:  # pragma: no cover - диагностика окружения
+        logger.debug("Не удалось определить наличие GPU через ctranslate2: %s", exc)
+
+    logger.info("GPU не обнаружена — используем режим CPU")
+    return False
 
 
 class Pipeline:
@@ -52,8 +81,8 @@ class Pipeline:
             sr=cfg.app.sample_rate,
         )
 
-        # Флаг GPU
-        use_gpu = cfg.resources.use_gpu is True
+        # Флаг GPU (auto-детект через ctranslate2)
+        use_gpu = _resolve_gpu_flag(cfg.resources)
 
         # ASR
         self.asr = ASR(

@@ -16,7 +16,7 @@ vad:
   min_silence_ms: 350
 asr:
   engine: "faster-whisper"
-  model_path: "models/whisper-large-v2-ct2"
+  model_path: "models/whisper-medium-ct2"
   beam_size: 5
   lang_detect: true
 mt:

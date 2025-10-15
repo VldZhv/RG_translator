@@ -1,4 +1,9 @@
 from __future__ import annotations
+import os as _os
+_os.environ.setdefault("ORT_DISABLE_CUDA", "1")
+_os.environ.setdefault("ORT_DISABLE_TENSORRT", "1")
+_os.environ.setdefault("ORT_DML_ENABLE", "0")
+
 import argparse
 from .config import Cfg
 from .pipeline import Pipeline

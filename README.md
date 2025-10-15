@@ -12,7 +12,7 @@ python -m src.app --config configs/default.yaml --mode mic
 ## Real run
 1. Установи PyTorch (CPU или CUDA) по инструкции с pytorch.org.
 2. Запусти `tools/fetch_models.ps1` и следуй подсказкам, скачай модели:
-   - Whisper (ct2): `models/whisper-*-ct2`
+   - Whisper (ct2): `models/whisper-medium-ct2`
    - MT (NLLB ct2 **или** Marian): `models/nllb-ru-en-ct2` или `models/marian-ru-en`
 3. В `configs/gpu_quality.yaml` установи `app.mock: false` и путь к моделям.
 4. Запуск:
