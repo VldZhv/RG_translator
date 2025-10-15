@@ -22,7 +22,7 @@ class ASR:
                         device=device,
                         compute_type=compute_type,
                     )
-                except RuntimeError as err:
+                except (RuntimeError, ValueError) as err:
                     if use_gpu and "float16" in compute_type:
                         # Для некоторых видеокарт (например, GTX 10xx) может потребоваться float32.
                         self.model = WhisperModel(
