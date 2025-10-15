@@ -3,22 +3,23 @@ app:
   input_wav: ""
   mock: false
   sample_rate: 16000
-  chunk_ms: 400
-  src_lang: "auto"
+  chunk_ms: 600
+  src_lang: "en"
   dir: en-ru
 resources:
-  use_gpu: false
+  use_gpu: true
   threads: 6
 vad:
   enabled: true
-  threshold: 0.005
-  min_speech_ms: 600
-  min_silence_ms: 400
+  threshold: 0.05
+  min_speech_ms: 300
+  min_silence_ms: 600
 asr:
-  engine: "faster-whisper"
-  model_path: "D:/CODE/translator-rt/models/whisper-small-ct2"
-  beam_size: 1
+  engine: "whisper_ct2"
+  model_path: "D:/CODE/translator-rt/models/whisper-medium-ct2"
+  beam_size: 5
   lang_detect: false
+  compute_type: "int8"
 mt:
   engine: "marian"
   model_path: "D:/CODE/translator-rt/models/marian-ru-en"   # RU→EN
